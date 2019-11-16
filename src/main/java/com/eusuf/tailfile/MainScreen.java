@@ -25,6 +25,8 @@ public class MainScreen extends javax.swing.JFrame {
     
     String status;
     
+    DetailBean details;
+    
     /**
      * Creates new form MainScreen
      */
@@ -122,22 +124,22 @@ public class MainScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(noOfLinesTF, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
-                    .addComponent(FileNameTF)
-                    .addComponent(LocationTF)
-                    .addComponent(HostIPTF)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(UserNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(UserNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addGap(32, 32, 32)
-                        .addComponent(PasswordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(PasswordTF))
+                    .addComponent(FileNameTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(HostIPTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(LocationTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(noOfLinesTF))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(132, 132, 132)
@@ -146,7 +148,7 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(StopTailBtn)
                 .addGap(100, 100, 100)
                 .addComponent(ExitBtn)
-                .addContainerGap(239, Short.MAX_VALUE))
+                .addContainerGap(360, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,11 +226,11 @@ public class MainScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void HostIPTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HostIPTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_HostIPTFActionPerformed
 
     private void LocationTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LocationTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_LocationTFActionPerformed
 
     private void StartStartTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartStartTailBtnActionPerformed
@@ -238,8 +240,11 @@ public class MainScreen extends javax.swing.JFrame {
             DetailBean details = populateDetailsBean();
             System.out.println(details.toString());
             t = new Thread(() -> {
-//                startTail(details);
-                startJschTail(details);
+                if(details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()){
+                    startTail(details);
+                }else{
+                    startJschTail(details);
+                }
             });
             t.start();
         }
@@ -279,7 +284,7 @@ public class MainScreen extends javax.swing.JFrame {
         }else{
             
         }
-        
+        //TODO: Handle file not found exception with a PopUp
         try{
             Process process = processBuilder.start();
 
@@ -305,9 +310,9 @@ public class MainScreen extends javax.swing.JFrame {
     
     private DetailBean populateDetailsBean(){
         
-        DetailBean details = new DetailBean();
+        details = new DetailBean();
         
-        details.hostName = HostIPTF.getText();
+        details.hostName = HostIPTF.getText().equalsIgnoreCase("") ? "localhost" : HostIPTF.getText();
         details.userName = UserNameTF.getText();
         details.location = LocationTF.getText();
         details.fileName = FileNameTF.getText();
@@ -318,17 +323,19 @@ public class MainScreen extends javax.swing.JFrame {
     }
     
     private void noOfLinesTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noOfLinesTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_noOfLinesTFActionPerformed
 
     private void StopTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopTailBtnActionPerformed
-        // TODO add your handling code here:
+        
         status="stop";
-//        t.stop();
+        if(details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()){
+            t.stop();
+        }
     }//GEN-LAST:event_StopTailBtnActionPerformed
 
     private void ExitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitBtnActionPerformed
-        // TODO add your handling code here:
+        
         System.exit(0);
     }//GEN-LAST:event_ExitBtnActionPerformed
 
