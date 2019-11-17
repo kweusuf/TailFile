@@ -22,11 +22,13 @@ import java.io.InputStreamReader;
 public class MainScreen extends javax.swing.JFrame {
 
     Thread t;
-    
+
     String status;
-    
+
     DetailBean details;
     
+    boolean follow = false;
+
     /**
      * Creates new form MainScreen
      */
@@ -59,6 +61,8 @@ public class MainScreen extends javax.swing.JFrame {
         ExitBtn = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         PasswordTF = new javax.swing.JPasswordField();
+        ClearBtn = new javax.swing.JButton();
+        FollowCB = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         OutputTA = new javax.swing.JTextArea();
@@ -116,6 +120,20 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel6.setText("Password");
 
+        ClearBtn.setText("Clear");
+        ClearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClearBtnActionPerformed(evt);
+            }
+        });
+
+        FollowCB.setText("Follow");
+        FollowCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FollowCBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,20 +153,24 @@ public class MainScreen extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addGap(32, 32, 32)
-                        .addComponent(PasswordTF))
+                        .addComponent(PasswordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
                     .addComponent(FileNameTF, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(HostIPTF, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(LocationTF, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(noOfLinesTF))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(132, 132, 132)
+                .addGap(96, 96, 96)
                 .addComponent(StartTailBtn)
-                .addGap(100, 100, 100)
+                .addGap(57, 57, 57)
+                .addComponent(FollowCB)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(StopTailBtn)
-                .addGap(100, 100, 100)
+                .addGap(95, 95, 95)
+                .addComponent(ClearBtn)
+                .addGap(96, 96, 96)
                 .addComponent(ExitBtn)
-                .addContainerGap(360, Short.MAX_VALUE))
+                .addGap(106, 106, 106))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,12 +199,14 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(noOfLinesTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(StartTailBtn)
                     .addComponent(StopTailBtn)
-                    .addComponent(ExitBtn))
-                .addContainerGap())
+                    .addComponent(ExitBtn)
+                    .addComponent(ClearBtn)
+                    .addComponent(FollowCB))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         OutputTA.setEditable(false);
@@ -226,118 +250,135 @@ public class MainScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void HostIPTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HostIPTFActionPerformed
-        
+
     }//GEN-LAST:event_HostIPTFActionPerformed
 
     private void LocationTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LocationTFActionPerformed
-        
+
     }//GEN-LAST:event_LocationTFActionPerformed
 
     private void StartStartTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartStartTailBtnActionPerformed
-
         status = "start";
+        
         if (t == null || !t.isAlive()) {
             DetailBean details = populateDetailsBean();
             System.out.println(details.toString());
             t = new Thread(() -> {
-                if(details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()){
+                if ((details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty())) {
                     startTail(details);
-                }else{
+                } else {
                     startJschTail(details);
                 }
             });
             t.start();
         }
     }//GEN-LAST:event_StartStartTailBtnActionPerformed
-    
+
     @Deprecated
     private static String checkOSType() {
         String OSType = System.getProperty("os.name");
-        if(OSType.startsWith("Win")){
+        if (OSType.startsWith("Win")) {
             OSType = "Windows";
-        }else{
+        } else {
             OSType = "Linux";
         }
         return OSType;
     }
-    
+
     @Deprecated
-    public void startTail(DetailBean details){
+    public void startTail(DetailBean details) {
         String OSType = checkOSType();
-        
+
         String sshCmd = "ssh " + details.userName + "@" + details.hostName;
         String tailfCmd = " tail -" + details.noOfLines + "f" + " " + details.location;
-        
-        if(!details.fileName.isEmpty()){
+
+        if (!details.fileName.isEmpty()) {
             tailfCmd = tailfCmd + "/" + details.fileName;
         }
 
-        if(!details.userName.isEmpty() && !details.hostName.isEmpty()){
+        if (!details.userName.isEmpty() && !details.hostName.isEmpty()) {
             tailfCmd = sshCmd + tailfCmd;
         }
-        
+
         ProcessBuilder processBuilder = new ProcessBuilder();
-        if("Windows".equalsIgnoreCase(OSType)){
+        if ("Windows".equalsIgnoreCase(OSType)) {
             processBuilder.command("cmd.exe", "/c", tailfCmd);
-        }else if("Linux".equalsIgnoreCase(OSType)){
+        } else if ("Linux".equalsIgnoreCase(OSType)) {
             processBuilder.command("bash", "-c", tailfCmd);
-        }else{
-            
+        } else {
+
         }
         //TODO: Handle file not found exception with a PopUp
-        try{
+        try {
             Process process = processBuilder.start();
 
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader reader
+                    = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
             while ((line = reader.readLine()) != null) {
                 OutputTA.append(line + "\n");
-                OutputTA.setCaretPosition(OutputTA.getDocument().getLength());
+                setCaretPosition();
                 System.out.println(line);
             }
 
             int exitCode = process.waitFor();
             System.out.println("\nExited with error code : " + exitCode);
 
-        }catch (IOException e) {
-                e.printStackTrace();
+            if (exitCode == 1) {
+                OutputTA.append("File not Found!\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (InterruptedException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
     }
-    
-    private DetailBean populateDetailsBean(){
-        
+
+    private void setCaretPosition() {
+        if(follow == true){
+            OutputTA.setCaretPosition(OutputTA.getDocument().getLength());
+        }
+    }
+
+    private DetailBean populateDetailsBean() {
+
         details = new DetailBean();
-        
+
         details.hostName = HostIPTF.getText().equalsIgnoreCase("") ? "localhost" : HostIPTF.getText();
         details.userName = UserNameTF.getText();
         details.location = LocationTF.getText();
         details.fileName = FileNameTF.getText();
         details.noOfLines = Integer.parseInt(noOfLinesTF.getText().equalsIgnoreCase("") ? "0" : noOfLinesTF.getText());
         details.password = new String(PasswordTF.getPassword());
-        
+
         return details;
     }
-    
+
     private void noOfLinesTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noOfLinesTFActionPerformed
-        
+
     }//GEN-LAST:event_noOfLinesTFActionPerformed
 
     private void StopTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopTailBtnActionPerformed
-        
-        status="stop";
-        if(details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()){
+        status = "stop";
+        if (details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()) {
             t.stop();
         }
     }//GEN-LAST:event_StopTailBtnActionPerformed
 
     private void ExitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitBtnActionPerformed
-        
         System.exit(0);
     }//GEN-LAST:event_ExitBtnActionPerformed
+
+    private void ClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearBtnActionPerformed
+        OutputTA.setText("");
+    }//GEN-LAST:event_ClearBtnActionPerformed
+
+    private void FollowCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FollowCBActionPerformed
+        // TODO add your handling code here:
+        follow = FollowCB.isSelected();
+    }//GEN-LAST:event_FollowCBActionPerformed
 
     private void startJschTail(DetailBean details) {
         try {
@@ -351,29 +392,27 @@ public class MainScreen extends javax.swing.JFrame {
             session.connect();
             System.out.println("Connected");
             Channel channel = session.openChannel("exec");
-           
+
             String inputCmd = "tail -" + details.noOfLines + "f " + details.location;
-            
-            if(!details.fileName.isEmpty()){
+
+            if (!details.fileName.isEmpty()) {
                 inputCmd = inputCmd + "/" + details.fileName;
-            }            
-            
+            }
+
             final String cmd = inputCmd;
-            
+
             t = new Thread(() -> {
                 processCommandExecution(session, channel, cmd);
             });
             t.start();
-//            processCommandExecution(session, channel, inputCmd);
-            
         } catch (JSchException e) {
             e.printStackTrace();
         }
     }
-    
-        private void processCommandExecution(Session session, Channel channel, String command1) {
-        
-        try{
+
+    private void processCommandExecution(Session session, Channel channel, String command1) {
+
+        try {
             System.out.println(command1);
             ((ChannelExec) channel).setCommand(command1);
             channel.setInputStream(null);
@@ -389,15 +428,13 @@ public class MainScreen extends javax.swing.JFrame {
                         break;
                     }
                     OutputTA.append(new String(tmp, 0, i));
-                    OutputTA.setCaretPosition(OutputTA.getDocument().getLength());
-                
-//                    System.out.print(new String(tmp, 0, i));
+                    setCaretPosition();
                 }
                 if (channel.isClosed()) {
                     System.out.println("exit-status: " + channel.getExitStatus());
                     break;
                 }
-                if ("stop".equalsIgnoreCase(status)){
+                if ("stop".equalsIgnoreCase(status)) {
                     System.out.println("exit-status: 0");
                     break;
                 }
@@ -406,13 +443,12 @@ public class MainScreen extends javax.swing.JFrame {
             session.disconnect();
             System.out.println("DONE");
             t.stop();
-            
-        } catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
-        
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -449,8 +485,10 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ClearBtn;
     private javax.swing.JButton ExitBtn;
     private javax.swing.JTextField FileNameTF;
+    private javax.swing.JCheckBox FollowCB;
     private javax.swing.JTextField HostIPTF;
     private javax.swing.JTextField LocationTF;
     private javax.swing.JTextArea OutputTA;
@@ -469,7 +507,5 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField noOfLinesTF;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

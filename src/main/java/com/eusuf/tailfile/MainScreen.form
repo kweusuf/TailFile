@@ -38,7 +38,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -67,7 +67,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="PasswordTF" max="32767" attributes="0"/>
+                          <Component id="PasswordTF" pref="388" max="32767" attributes="0"/>
                       </Group>
                       <Component id="FileNameTF" alignment="1" max="32767" attributes="0"/>
                       <Component id="HostIPTF" alignment="1" max="32767" attributes="0"/>
@@ -77,13 +77,17 @@
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                   <Component id="StartTailBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                  <Component id="FollowCB" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="StopTailBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
+                  <Component id="ClearBtn" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                   <Component id="ExitBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="360" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -120,13 +124,15 @@
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="noOfLinesTF" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="StartTailBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="StopTailBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="ExitBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ClearBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FollowCB" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -206,6 +212,22 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="PasswordTF">
+        </Component>
+        <Component class="javax.swing.JButton" name="ClearBtn">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Clear"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ClearBtnActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="FollowCB">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Follow"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FollowCBActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
