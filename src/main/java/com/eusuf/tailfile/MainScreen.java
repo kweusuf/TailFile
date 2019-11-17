@@ -162,13 +162,13 @@ public class MainScreen extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(96, 96, 96)
                 .addComponent(StartTailBtn)
-                .addGap(57, 57, 57)
+                .addGap(80, 80, 80)
                 .addComponent(FollowCB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(80, 80, 80)
                 .addComponent(StopTailBtn)
-                .addGap(95, 95, 95)
+                .addGap(80, 80, 80)
                 .addComponent(ClearBtn)
-                .addGap(96, 96, 96)
+                .addGap(80, 80, 80)
                 .addComponent(ExitBtn)
                 .addGap(106, 106, 106))
         );
@@ -401,11 +401,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
 
             final String cmd = inputCmd;
-
-            t = new Thread(() -> {
-                processCommandExecution(session, channel, cmd);
-            });
-            t.start();
+            processCommandExecution(session, channel, cmd);
         } catch (JSchException e) {
             e.printStackTrace();
         }
