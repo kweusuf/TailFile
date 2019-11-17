@@ -266,6 +266,8 @@ public class MainScreen extends javax.swing.JFrame {
             t = new Thread(() -> {
                 if ((details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty())) {
                     startTail(details);
+                } else if(details.password.isEmpty()){
+                    startTail(details);
                 } else {
                     startJschTail(details);
                 }
@@ -376,7 +378,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_ClearBtnActionPerformed
 
     private void FollowCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FollowCBActionPerformed
-        // TODO add your handling code here:
         follow = FollowCB.isSelected();
     }//GEN-LAST:event_FollowCBActionPerformed
 
