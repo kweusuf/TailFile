@@ -63,6 +63,7 @@ public class MainScreen extends javax.swing.JFrame {
         PasswordTF = new javax.swing.JPasswordField();
         ClearBtn = new javax.swing.JButton();
         FollowCB = new javax.swing.JCheckBox();
+        TailStatusLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         OutputTA = new javax.swing.JTextArea();
@@ -138,39 +139,41 @@ public class MainScreen extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(UserNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addGap(32, 32, 32)
-                        .addComponent(PasswordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
-                    .addComponent(FileNameTF, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(HostIPTF, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(LocationTF, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(noOfLinesTF))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(UserNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6)
+                                .addGap(32, 32, 32)
+                                .addComponent(PasswordTF, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+                            .addComponent(FileNameTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(HostIPTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(LocationTF, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(noOfLinesTF)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(StartTailBtn)
+                        .addGap(80, 80, 80)
+                        .addComponent(FollowCB)
+                        .addGap(80, 80, 80)
+                        .addComponent(StopTailBtn)
+                        .addGap(80, 80, 80)
+                        .addComponent(ClearBtn)
+                        .addGap(80, 80, 80)
+                        .addComponent(ExitBtn)
+                        .addGap(74, 74, 74)
+                        .addComponent(TailStatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(StartTailBtn)
-                .addGap(80, 80, 80)
-                .addComponent(FollowCB)
-                .addGap(80, 80, 80)
-                .addComponent(StopTailBtn)
-                .addGap(80, 80, 80)
-                .addComponent(ClearBtn)
-                .addGap(80, 80, 80)
-                .addComponent(ExitBtn)
-                .addGap(106, 106, 106))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,8 +208,9 @@ public class MainScreen extends javax.swing.JFrame {
                     .addComponent(StopTailBtn)
                     .addComponent(ExitBtn)
                     .addComponent(ClearBtn)
-                    .addComponent(FollowCB))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(FollowCB)
+                    .addComponent(TailStatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         OutputTA.setEditable(false);
@@ -259,7 +263,7 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void StartStartTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartStartTailBtnActionPerformed
         status = "start";
-        
+        TailStatusLabel.setText("Tail Running.");
         if (t == null || !t.isAlive()) {
             DetailBean details = populateDetailsBean();
             System.out.println(details.toString());
@@ -364,12 +368,16 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void StopTailBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopTailBtnActionPerformed
         status = "stop";
-        if (details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()) {
-            t.stop();
+        TailStatusLabel.setText("Tail Stopped.");
+        if (details != null && details.hostName.equalsIgnoreCase("localhost") && details.password.isEmpty()) {
+            if(t.isAlive() && t != null){
+                t.stop();
+            }
         }
     }//GEN-LAST:event_StopTailBtnActionPerformed
 
     private void ExitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitBtnActionPerformed
+        StopTailBtnActionPerformed(evt);
         System.exit(0);
     }//GEN-LAST:event_ExitBtnActionPerformed
 
@@ -379,6 +387,7 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void FollowCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FollowCBActionPerformed
         follow = FollowCB.isSelected();
+        setCaretPosition();
     }//GEN-LAST:event_FollowCBActionPerformed
 
     private void startJschTail(DetailBean details) {
@@ -492,6 +501,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPasswordField PasswordTF;
     private javax.swing.JButton StartTailBtn;
     private javax.swing.JButton StopTailBtn;
+    private javax.swing.JLabel TailStatusLabel;
     private javax.swing.JTextField UserNameTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
